@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Clients", "01.Clients", "{BF580660-E410-444D-9BC9-0994D932209C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Models", "02.Models", "{3E946E83-1338-4F77-9046-4B2519669E2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClient", "src\ConsoleClient\ConsoleClient.csproj", "{94E633EB-486B-44D6-8EE9-652734F4BC92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "src\Models\Models.csproj", "{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.Services", "03.Services", "{4629E056-DA9F-4335-8A54-6DDC804FF961}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06.Common", "06.Common", "{B926E6F3-2427-44DE-8658-1B6F0C2D7741}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "src\Services\Services.csproj", "{C9B01FC7-48DE-461F-B209-D6251823510C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.UnitOfWork", "04.UnitOfWork", "{0EF89B8E-64CF-465D-A9FD-525ED35F0BA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.Repository", "05.Repository", "{AAB382A9-44F1-4AAC-90E7-722355D8DADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitOfWork.Interfaces", "src\UnitOfWork.Interfaces\UnitOfWork.Interfaces.csproj", "{0F89B8E4-61DA-4915-A710-245D5927D5DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitOfWork.SqlServer", "src\UnitOfWork.SqlServer\UnitOfWork.SqlServer.csproj", "{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Interfaces", "src\Repository.Interfaces\Repository.Interfaces.csproj", "{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.SqlServer", "src\Repository.SqlServer\Repository.SqlServer.csproj", "{CEAE847E-B74F-476F-A93E-DC425FCA8184}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94E633EB-486B-44D6-8EE9-652734F4BC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E633EB-486B-44D6-8EE9-652734F4BC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E633EB-486B-44D6-8EE9-652734F4BC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E633EB-486B-44D6-8EE9-652734F4BC92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9B01FC7-48DE-461F-B209-D6251823510C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9B01FC7-48DE-461F-B209-D6251823510C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9B01FC7-48DE-461F-B209-D6251823510C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9B01FC7-48DE-461F-B209-D6251823510C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F89B8E4-61DA-4915-A710-245D5927D5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F89B8E4-61DA-4915-A710-245D5927D5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F89B8E4-61DA-4915-A710-245D5927D5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F89B8E4-61DA-4915-A710-245D5927D5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEAE847E-B74F-476F-A93E-DC425FCA8184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAE847E-B74F-476F-A93E-DC425FCA8184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAE847E-B74F-476F-A93E-DC425FCA8184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAE847E-B74F-476F-A93E-DC425FCA8184}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{94E633EB-486B-44D6-8EE9-652734F4BC92} = {BF580660-E410-444D-9BC9-0994D932209C}
+		{B547B3E2-FCEC-45DE-9798-A4CAE12B71D2} = {3E946E83-1338-4F77-9046-4B2519669E2D}
+		{C9B01FC7-48DE-461F-B209-D6251823510C} = {4629E056-DA9F-4335-8A54-6DDC804FF961}
+		{EB1EBBB2-FD15-4F8A-B099-1E5B75DD88FC} = {B926E6F3-2427-44DE-8658-1B6F0C2D7741}
+		{0F89B8E4-61DA-4915-A710-245D5927D5DB} = {0EF89B8E-64CF-465D-A9FD-525ED35F0BA4}
+		{A1FE36D7-F1D9-45D6-843B-A14CDF9D1F8D} = {0EF89B8E-64CF-465D-A9FD-525ED35F0BA4}
+		{4F15C40D-A2BC-4BDB-AED6-044EF0441EEB} = {AAB382A9-44F1-4AAC-90E7-722355D8DADC}
+		{CEAE847E-B74F-476F-A93E-DC425FCA8184} = {AAB382A9-44F1-4AAC-90E7-722355D8DADC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F76D06C-38E6-4417-BC64-1F0D37A24822}
+	EndGlobalSection
+EndGlobal
