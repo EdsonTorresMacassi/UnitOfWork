@@ -27,9 +27,15 @@ namespace Repository.SqlServer
             }
         }
 
-        public void Delete(int id)
-        {
-            throw new System.NotImplementedException();
+        public void Remove(int id)
+        {            
+            var query = "delete from Invoices where Id = @Id";
+            using (var cmd = CreateCommand(query))
+            {
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.CommandTimeout = 0;
+                cmd.ExecuteNonQuery();
+            }   
         }
 
         public Invoice Get(int id)

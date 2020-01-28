@@ -7,6 +7,7 @@ namespace Repository.Interfaces
     public interface IInvoiceDetailRepository : IReadRepository<InvoiceDetail, int>
     {
         void Create(IEnumerable<InvoiceDetail> model, int invoiceId);
+        void RemoveByInvoiceId(int invoiceId);
         IEnumerable<InvoiceDetail> GetAllByInvoiceId(int invoiceId);
     }
 }

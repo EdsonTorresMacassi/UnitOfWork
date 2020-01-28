@@ -71,5 +71,16 @@ namespace Repository.SqlServer
             }
             return result;
         }
+
+        public void RemoveByInvoiceId(int invoiceId)
+        {
+            var query = "delete from InvoiceDetail where InvoiceId = @InvoiceId";            
+            using (var cmd = CreateCommand(query))
+            {
+                cmd.Parameters.AddWithValue("@InvoiceId", invoiceId);
+                cmd.CommandTimeout = 0;
+                cmd.ExecuteNonQuery();
+            }            
+        }
     }
 }

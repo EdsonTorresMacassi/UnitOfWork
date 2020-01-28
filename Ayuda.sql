@@ -26,3 +26,12 @@ System.PlatformNotSupportedException
   Source=System.Transactions.Local
   StackTrace:
 	Error en OpenClipboard (Exception from HRESULT:0x800401D0 (CLIPBRD_E_CANT_OPEN))
+
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/EdsonTorresMacassi/Prueba.git
+git push -u origin master
+
+git remote add origin https://github.com/EdsonTorresMacassi/Prueba.git
+git push -u origin master

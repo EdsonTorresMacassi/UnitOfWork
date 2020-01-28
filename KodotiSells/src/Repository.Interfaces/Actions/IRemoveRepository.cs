@@ -2,6 +2,6 @@
 {
     public interface IRemoveRepository<T>
     {
-        void Delete(T id);
+        void Remove(T id);
     }
 }
