@@ -2,6 +2,7 @@
 using Services;
 using System;
 using System.Collections.Generic;
+using UnitOfWork.SqlServer;
 
 namespace ConsoleClient
 {
@@ -11,9 +12,14 @@ namespace ConsoleClient
         {
             //TestService.TestConecction();
             //List<Invoice> result = null;            
-            InvoiceService servicio = new InvoiceService();
+            //InvoiceService servicio = new InvoiceService();
             //result = servicio.GetAll();
             //Invoice result = null;
+            //result = servicio.Get(1);
+            UnitOfWorkSqlServer unitOfWork = new UnitOfWorkSqlServer();
+            InvoiceService servicio = new InvoiceService(unitOfWork);
+            //Invoice result = new Invoice();
+            //result = servicio.Get(2);
             //result = servicio.Get(1);
 
             
@@ -22,7 +28,7 @@ namespace ConsoleClient
             List<InvoiceDetail> details = null;
             details = new List<InvoiceDetail>();
             invoice = new Invoice();
-            invoice.ClienteId = 1;
+            invoice.ClientId = 1;
 
             detail = new InvoiceDetail();
             detail.ProductId = 1;
@@ -37,7 +43,8 @@ namespace ConsoleClient
             details.Add(detail);
 
             invoice.Detail = details;
-            servicio.Create(invoice);            
+            servicio.Create(invoice);       
+            
 
             /*
             Invoice invoice = null;

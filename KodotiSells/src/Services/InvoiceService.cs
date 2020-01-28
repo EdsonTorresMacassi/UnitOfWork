@@ -4,93 +4,69 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
+using UnitOfWork.Interfaces;
 
 namespace Services
 {
     public class InvoiceService
     {
-        public List<Invoice> GetAll()
+        private IUnitOfWork _unitOfWork;
+
+        public InvoiceService(IUnitOfWork unitOfWork)
         {
-            List<Invoice> result = null;
-            Invoice registro = null;
+            this._unitOfWork = unitOfWork;
+        }
+
+        public IEnumerable<Invoice> GetAll()
+        {
+            IEnumerable<Invoice> results = null;            
             try
             {
-                using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
+                using (var cn = _unitOfWork.Create())
                 {
-                    cn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM Invoices", cn))
+                    results = cn.Repositories.InvoiceRepository.GetAll();
+                    foreach (var result in results)
                     {
-                        cmd.CommandTimeout = 0;
-                        using (SqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            result = new List<Invoice>();
-                            while (dr.Read())
-                            {
-                                registro = new Invoice();
-                                registro.Id = dr.IsDBNull(dr.GetOrdinal("Id")) ? 0 : dr.GetInt32(dr.GetOrdinal("Id"));
-                                registro.Iva = dr.IsDBNull(dr.GetOrdinal("Iva")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Iva"));
-                                registro.SubTotal = dr.IsDBNull(dr.GetOrdinal("SubTotal")) ? 0 : dr.GetDecimal(dr.GetOrdinal("SubTotal"));
-                                registro.Total = dr.IsDBNull(dr.GetOrdinal("Total")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Total"));
-                                registro.ClienteId = dr.IsDBNull(dr.GetOrdinal("ClienteId")) ? 0 : dr.GetInt32(dr.GetOrdinal("ClienteId"));
-                                result.Add(registro);
-                            }
-                        }
-                    }
-                    cn.Close();
+                        result.Client = cn.Repositories.ClientRepository.Get(result.ClientId);
+                        result.Detail = cn.Repositories.InvoiceDetailRepository.GetAllByInvoiceId(result.Id);
 
-                    foreach (var invoice in result)
-                    {
-                        SetClient(invoice, cn);
-                        SetDetail(invoice, cn);
+                        foreach (var item in result.Detail)
+                        {
+                            item.Product = cn.Repositories.ProductRepository.Get(item.ProductId);
+                        }
                     }
                 }
             }
             catch (System.Exception)
             {
-
                 throw;
             }
 
-            return result;
+            return results;
         }
 
         public Invoice Get(int id) 
         {
-            Invoice registro = null;
+            Invoice result = null;
             try
             {
-                using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
+                using (var cn = _unitOfWork.Create())
                 {
-                    cn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT * FROM Invoices WHERE id = @Id", cn))
-                    {
-                        cmd.Parameters.AddWithValue("@Id", id);
-                        cmd.CommandTimeout = 0;
-                        using (SqlDataReader dr = cmd.ExecuteReader())
-                        {                            
-                            while (dr.Read())
-                            {
-                                registro = new Invoice();
-                                registro.Id = dr.IsDBNull(dr.GetOrdinal("Id")) ? 0 : dr.GetInt32(dr.GetOrdinal("Id"));
-                                registro.Iva = dr.IsDBNull(dr.GetOrdinal("Iva")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Iva"));
-                                registro.SubTotal = dr.IsDBNull(dr.GetOrdinal("SubTotal")) ? 0 : dr.GetDecimal(dr.GetOrdinal("SubTotal"));
-                                registro.Total = dr.IsDBNull(dr.GetOrdinal("Total")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Total"));
-                                registro.ClienteId = dr.IsDBNull(dr.GetOrdinal("ClienteId")) ? 0 : dr.GetInt32(dr.GetOrdinal("ClienteId"));                                
-                            }
-                        }
-                    }
-                    cn.Close();
+                    result = cn.Repositories.InvoiceRepository.Get(id);
+                    result.Client = cn.Repositories.ClientRepository.Get(result.ClientId);
+                    result.Detail = cn.Repositories.InvoiceDetailRepository.GetAllByInvoiceId(result.Id);
 
-                    SetClient(registro, cn);
-                    SetDetail(registro, cn);                    
-                }
+                    foreach (var item in result.Detail)
+                    {
+                        item.Product = cn.Repositories.ProductRepository.Get(item.ProductId);
+                    }
+                }                
             }
             catch (System.Exception)
             {
-
                 throw;
             }
-            return registro;
+            return result;
         }
 
         public void Create(Invoice model) 
@@ -98,50 +74,50 @@ namespace Services
             PrepareOrder(model);
             try
             {
-                //using (TransactionScope transaction = new TransactionScope())
-                //{
-                    using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
-                    {
-                        cn.Open();
-                        AddHeader(model, cn);
-                        AddDetail(model, cn);
-                        cn.Close();
-                    }
-                //    transaction.Complete();
-                //}
+                using (var cn = _unitOfWork.Create())
+                {
+                    cn.Repositories.InvoiceRepository.Create(model);
+                    cn.Repositories.InvoiceDetailRepository.Create(model.Detail, model.Id);
+                    cn.SaveChanges();
+                }              
             }
             catch (System.Exception)
             {
-
                 throw;
             }
-}
+        }
 
         public void Update(Invoice model)
         {
             PrepareOrder(model);
             try
             {
-                using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
+                using (var cn = _unitOfWork.Create())
                 {
-                    cn.Open();
-                    UpdateHeader(model, cn);
-                    RemoveDetail(model.Id, cn);
-                    AddDetail(model, cn);
-                    cn.Close();
+                    cn.Repositories.InvoiceRepository.Update(model);
+                    //cn.Repositories.InvoiceDetailRepository.RemoveByInvoiceId(model.Id);
+                    cn.Repositories.InvoiceDetailRepository.Create(model.Detail, model.Id);
+                    cn.SaveChanges();
                 }
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
 
-        public void Delete(int Id)
+        public void Delete(int id)
         {            
             try
             {
+                using (var cn = _unitOfWork.Create())
+                {
+                    //cn.Repositories.InvoiceRepository.Remove(id);
+                    //cn.Repositories.InvoiceRepository.Remove(id);
+                    cn.SaveChanges();
+                }
+
+                /*
                 var query2 = "delete from InvoiceDetail where InvoiceId = @Id";
                 using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
                 {
@@ -166,80 +142,16 @@ namespace Services
                         cmd.ExecuteNonQuery();
                     }
                     cn.Close();
-                }                
+                }
+                */
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
-
-        private void AddHeader(Invoice model, SqlConnection sqlConnection)
-        {
-            var query = "insert into Invoices (ClienteId, Iva, SubTotal, Total) output inserted.Id values(@ClienteId, @Iva, @SubTotal, @Total)";
-            using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
-            {
-                cn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
-                    cmd.Parameters.AddWithValue("@ClienteId", model.ClienteId);
-                    cmd.Parameters.AddWithValue("@Iva", model.Iva);
-                    cmd.Parameters.AddWithValue("@SubTotal", model.SubTotal);
-                    cmd.Parameters.AddWithValue("@Total", model.Total);
-                    cmd.CommandTimeout = 0;
-
-                    model.Id = (int)cmd.ExecuteScalar();
-                }
-                cn.Close();
-            }
-        }
-
-        private void UpdateHeader(Invoice model, SqlConnection sqlConnection)
-        {
-            var query = "Update a SET a.ClienteId = @ClienteId, a.Iva = @Iva, a.SubTotal = @SubTotal, a.Total = @Total FROM Invoices a WHERE a.Id = @Id";
-            using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
-            {
-                cn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, cn))
-                {
-                    cmd.Parameters.AddWithValue("@ClienteId", model.ClienteId);
-                    cmd.Parameters.AddWithValue("@Iva", model.Iva);
-                    cmd.Parameters.AddWithValue("@SubTotal", model.SubTotal);
-                    cmd.Parameters.AddWithValue("@Total", model.Total);
-                    cmd.Parameters.AddWithValue("@Id", model.Id);
-                    cmd.CommandTimeout = 0;
-                    cmd.ExecuteNonQuery();
-                }
-                cn.Close();
-            }
-        }
-
-        private void AddDetail(Invoice model, SqlConnection sqlConnection)
-        {
-            foreach (var detail in model.Detail)
-            {
-                var query = "insert into InvoiceDetail (InvoiceId, ProductId, Quantity, Price, Iva, SubTotal, Total) output inserted.Id values(@InvoiceId, @ProductId, @Quantity, @Price, @Iva, @SubTotal, @Total)";
-                using (SqlConnection cn = new SqlConnection(Parameters.ConnectionString))
-                {
-                    cn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, cn))
-                    {
-                        cmd.Parameters.AddWithValue("@InvoiceId", model.Id);
-                        cmd.Parameters.AddWithValue("@ProductId", detail.ProductId);
-                        cmd.Parameters.AddWithValue("@Quantity", detail.Quantity);
-                        cmd.Parameters.AddWithValue("@Price", detail.Price);
-                        cmd.Parameters.AddWithValue("@Iva", detail.Iva);
-                        cmd.Parameters.AddWithValue("@SubTotal", detail.SubTotal);
-                        cmd.Parameters.AddWithValue("@Total", detail.Total);
-                        cmd.CommandTimeout = 0;
-                        cmd.ExecuteNonQuery();
-                    }
-                    cn.Close();
-                }
-            }            
-        }
-
+        
+        /*
         private void RemoveDetail(int invoceId, SqlConnection sqlConnection)
         {
             var query = "delete from InvoiceDetail where InvoiceId = @InvoiceId";
@@ -255,6 +167,7 @@ namespace Services
                 cn.Close();
             }         
         }
+        */
 
         public void PrepareOrder(Invoice model)
         {
@@ -270,6 +183,7 @@ namespace Services
             model.SubTotal = model.Detail.Sum(x => x.SubTotal);
         }
 
+        /*
         private void SetClient(Invoice invoice, SqlConnection sqlConnection) 
         {
             Client registro = null;
@@ -280,7 +194,7 @@ namespace Services
                     cn.Open();
                     using (SqlCommand cmd = new SqlCommand("SELECT * FROM Clients WHERE id = @ClienteId", cn))
                     {
-                        cmd.Parameters.AddWithValue("@ClienteId", invoice.ClienteId);
+                        cmd.Parameters.AddWithValue("@ClienteId", invoice.ClientId);
                         cmd.CommandTimeout = 0;
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {   
@@ -303,7 +217,9 @@ namespace Services
 
             invoice.Client = registro;
         }
+        */
 
+        /*
         private void SetDetail(Invoice invoice, SqlConnection sqlConnection)
         {
             List<InvoiceDetail> detail = null;
@@ -332,7 +248,7 @@ namespace Services
                                 registro.SubTotal = dr.IsDBNull(dr.GetOrdinal("SubTotal")) ? 0 : dr.GetDecimal(dr.GetOrdinal("SubTotal"));
                                 registro.Total = dr.IsDBNull(dr.GetOrdinal("Total")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Total"));
                                 //registro.Invoice = invoice;
-                                detail.Add(registro);
+                                //detail.Add(registro);
                             }
                         }
                     }
@@ -352,7 +268,9 @@ namespace Services
                 SetProduct(details, sqlConnection);
             }
         }
+        */
 
+        /*
         private void SetProduct(InvoiceDetail invoiceDetail, SqlConnection sqlConnection)
         {
             Product registro = null;
@@ -387,5 +305,6 @@ namespace Services
 
             invoiceDetail.Product = registro;
         }
+        */
     }
 }

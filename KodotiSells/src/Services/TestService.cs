@@ -10,12 +10,14 @@ namespace Services
         {
             try
             {
+                /*
                 using (var cn = new SqlConnection(Parameters.ConnectionString))
                 {
                     cn.Open();
                     Console.WriteLine("Sql Connection successful");
                     cn.Close();
                 }
+                */
             }
             catch (Exception ex) 
             {
