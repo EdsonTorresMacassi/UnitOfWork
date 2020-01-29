@@ -6,7 +6,7 @@ using UnitOfWork.Interfaces;
 
 namespace Services
 {
-    public class InvoiceService
+    public class InvoiceService : IInvoiceService
     {
         private IUnitOfWork _unitOfWork;
 
@@ -110,7 +110,7 @@ namespace Services
             {
                 using (var cn = _unitOfWork.Create())
                 {
-                    cn.Repositories.InvoiceDetailRepository.RemoveByInvoiceId(id);                    
+                    cn.Repositories.InvoiceDetailRepository.RemoveByInvoiceId(id);
                     cn.Repositories.InvoiceRepository.Remove(id);
                     cn.SaveChanges();
                 }

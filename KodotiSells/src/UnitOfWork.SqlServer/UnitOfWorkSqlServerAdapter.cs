@@ -10,9 +10,9 @@ namespace UnitOfWork.SqlServer
         private SqlTransaction _transaction { get; set; }
         public IUnitOfWorkRepository Repositories { get; set; }
 
-        public UnitOfWorkSqlServerAdapter()
+        public UnitOfWorkSqlServerAdapter(string connectionString)
         {
-            _cn = new SqlConnection(Parameters.ConnectionString);
+            _cn = new SqlConnection(connectionString);
             _cn.Open();
             _transaction = _cn.BeginTransaction();
             Repositories = new UnitOfWorkSqlServerRepository(_cn, _transaction);
