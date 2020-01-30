@@ -17,9 +17,11 @@ namespace ConsoleClient
             //Invoice result = null;
             //result = servicio.Get(1);
 
-   
+            
             UnitOfWorkSqlServer unitOfWork = new UnitOfWorkSqlServer();
             InvoiceService servicio = new InvoiceService(unitOfWork);
+            var result = servicio.GetAll();
+            /*
             //Invoice result = new Invoice();
             //result = servicio.Get(2);
             //result = servicio.Get(1);
@@ -46,7 +48,7 @@ namespace ConsoleClient
 
             invoice.Detail = details;
             servicio.Create(invoice);       
- 
+            */
 
             /*
             Invoice invoice = null;

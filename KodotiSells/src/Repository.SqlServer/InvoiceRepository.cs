@@ -70,6 +70,7 @@ namespace Repository.SqlServer
                 cmd.CommandTimeout = 0;
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
+                    results = new List<Invoice>();
                     while (dr.Read())
                     {
                         result = new Invoice();
@@ -78,6 +79,7 @@ namespace Repository.SqlServer
                         result.SubTotal = dr.IsDBNull(dr.GetOrdinal("SubTotal")) ? 0 : dr.GetDecimal(dr.GetOrdinal("SubTotal"));
                         result.Total = dr.IsDBNull(dr.GetOrdinal("Total")) ? 0 : dr.GetDecimal(dr.GetOrdinal("Total"));
                         result.ClientId = dr.IsDBNull(dr.GetOrdinal("ClientId")) ? 0 : dr.GetInt32(dr.GetOrdinal("ClientId"));
+                        results.Add(result);
                     }
                 }
             }
